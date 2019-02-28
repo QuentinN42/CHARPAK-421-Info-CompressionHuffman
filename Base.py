@@ -70,6 +70,23 @@ def encode_ascii(txt):
     return ''.join([encode(c) for c in txt])
 
 
+def frequences(txt : str) -> dict:
+    """
+    permet d'etablir la frequence de chaque lettre q'une chaine de carracteres
+    :param txt: str chaine de carracteres
+    :return d: dict dictrionaire des frequences
+    >>> frequences('ABRACADABRA')
+    {'A': 5, 'B': 2, 'R': 2, 'C': 1, 'D': 1}
+    """
+    d = {}
+    for c in txt:
+        if c in d:
+            d[c] += 1
+        else:
+            d[c] = 1
+    return d
+
+
 if __name__ == "__main__":
     A = Arbre(18,
               Arbre(8,
