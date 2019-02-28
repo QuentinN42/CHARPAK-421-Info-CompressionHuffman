@@ -36,14 +36,17 @@ class Feuille(Arbre):
               str(self.frequence) +
               '(' + self.symbole + ')')
 
+
 class Huffman:
     """ Algorithme de construction de l'arbre de Huffman """
-    def __init__(self, frequences):
+    def __init__(self, freq):
         """ Constructeur
 
-            frequences: dictionnaire des fréquences
+            freq: dictionnaire des fréquences
         """
+        print(freq)
         self.foret = []
+
 
 def encode(c: str) -> str:
     """
@@ -56,6 +59,7 @@ def encode(c: str) -> str:
     '01100010'
     """
     return "{:08b}".format(ord(c))
+
 
 def encode_ascii(txt):
     """
@@ -70,7 +74,7 @@ def encode_ascii(txt):
     return ''.join([encode(c) for c in txt])
 
 
-def frequences(txt : str) -> dict:
+def frequences(txt: str) -> dict:
     """
     permet d'etablir la frequence de chaque lettre q'une chaine de carracteres
     :param txt: str chaine de carracteres
@@ -96,4 +100,3 @@ if __name__ == "__main__":
                     Feuille(5, 'b')),
               Feuille(10, 'a'))
     A.affiche()
-
