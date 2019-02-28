@@ -45,14 +45,29 @@ class Huffman:
         """
         self.foret = []
 
+def encode(c: str) -> str:
+    """
+    code un caractere en ascii 8 bit
+
+    :param c: str
+    :return: str
+
+    >>> encode('b')
+    '01100010'
+    """
+    return "{:08b}".format(ord(c))
 
 def encode_ascii(txt):
     """
-    :arg txt: str
+    permet d'encoder en ascii
+
+    :arg txt: str chaine de caracteres a coder
     :return code: str mots binaires joints
+
     >>> encode_ascii('bonjour')
     '01100010011011110110111001101010011011110111010101110010'
     """
+    return ''.join([encode(c) for c in txt])
 
 
 if __name__ == "__main__":
@@ -64,3 +79,4 @@ if __name__ == "__main__":
                     Feuille(5, 'b')),
               Feuille(10, 'a'))
     A.affiche()
+
