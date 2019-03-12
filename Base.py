@@ -77,10 +77,12 @@ def encode_ascii(txt):
 def frequences(txt: str) -> dict:
     """
     permet d'etablir la frequence de chaque lettre q'une chaine de carracteres
+
     :param txt: str chaine de carracteres
     :return d: dict dictrionaire des frequences
-    >>> frequences('ABRACADABRA')
-    {'A': 5, 'B': 2, 'R': 2, 'C': 1, 'D': 1}
+
+    >>> frequences('ABRACADABRA') == {'A': 5, 'B': 2, 'R': 2, 'C': 1, 'D': 1}
+    True
     """
     d = {}
     for c in txt:
