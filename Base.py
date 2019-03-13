@@ -19,6 +19,9 @@ class Arbre:
         self.droit.affiche(prefixes)
         prefixes.pop()
 
+    def __add__(self, other):
+        return Arbre(self.frequence + other.frequence, self, other)
+
 
 class Feuille(Arbre):
     def __init__(self, frequence, symbole):
@@ -37,15 +40,66 @@ class Feuille(Arbre):
               '(' + self.symbole + ')')
 
 
+#Huffman
+
+
 class Huffman:
     """ Algorithme de construction de l'arbre de Huffman """
+    
+    def pop_min(self) -> Feuille:
+        """
+        trie le tableau
+        pop le premier element
+        
+        :return Feuille: la moins frequente des feuilles
+        """
+        self.foret.sort(key = lambda x: x.frequence)
+        return self.foret.pop(0)
+
+    def fusion(self) -> bool:
+        """
+        fusionne si possible les deux plus petits arbres
+        
+        :return bool: fusion possible ?
+        
+        >>> Huffman({'a': 5}).fusion()
+        False
+        >>> Huffman({'a': 5, 'b': 5}).fusion()
+        True
+        """
+        if len(self.foret) > 1:
+            e1 = self.pop_min()
+            e2 = self.pop_min()
+            self.foret.append(e1 + e2)
+            return True
+        else:
+            return False
+
+    def arbre(self) -> Arbre:
+        """
+        Cree un arbre de huffman
+        tourne tant que fusion est vrai
+        
+        :return Arbre: L'arbre cree
+        """
+        return self.foret[0]
+
+    def affiche(self) -> None:
+        """
+        affiche l'arbre de huffman
+        
+        :return None:
+        """
+        self.arbre().affiche()
+
     def __init__(self, freq):
         """ Constructeur
 
             freq: dictionnaire des fréquences
         """
-        print(freq)
-        self.foret = []
+        self.foret = [Feuille(freq[symbole], symbole) for symbole in freq.keys()]
+        while self.fusion():
+            pass
 
 
 #Fonctions
@@ -108,7 +162,7 @@ def decorated_test(func):
     return inner
 
 
-def _test_dict(dico,func) -> list:
+def _test_dict(dico, func) -> list:
     """
     test une fonction pour chaque element d'un dictionnaire
     
