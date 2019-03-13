@@ -1,5 +1,5 @@
 class Arbre:
-    def __init__(self, frequence, gauche, droit):
+    def __init__(self, frequence, gauche, droit, dic ={}):
         """ Construit un Arbre
 
             frequence: int
@@ -8,6 +8,7 @@ class Arbre:
         self.frequence = frequence
         self.gauche = gauche
         self.droit = droit
+        self.dic = dic
 
     def affiche(self, prefixes=['    ']):
         """ Affiche l'arbre """
@@ -25,7 +26,6 @@ class Arbre:
     def __eq__(self, other):
         """
         egal ou non ?
-
         :param other:
         :return: Bool
         """
@@ -44,13 +44,43 @@ class Arbre:
         """
         return not self == other
 
+    def __contains__(self, item):
+        """
+        pour le if a in Arbre:
+        :param item: quelque chose
+        :return: bool
+        """
+        return item == self or item in self.droit or item in self.gauche
+    
+    def code(self, feuille) -> str:
+        """
+        descend l'arbre pour trouver le code d'une feuille
+        :param feuille: Feuille
+        :return code: str
+        """
+        if feuille not in self:
+            raise "feuille {} not in {}".format(feuille, self)
+        code = ""
+        selected = self
+        while selected != feuille:
+            if feuille in selected.gauche:
+                selected = selected.gauche
+            else:
+                selected = selected.droit
+        return code
+    
+    def table_de_codage(self, code=''):
+        self.gauche.table_de_codage(code + '0')
+        self.droit.table_de_codage(code + '1')
+        return self.dic
 
 class Feuille(Arbre):
     def __init__(self, frequence, symbole):
-        """ Construit une feuille
+        """
+        Construit une feuille
 
-            frequence: int
-            symbole: str
+        frequence: int
+        symbole: str
         """
         Arbre.__init__(self, frequence, None, None)
         self.symbole = symbole
@@ -64,7 +94,6 @@ class Feuille(Arbre):
     def __eq__(self, other):
         """
         egal ou non ?
-        
         :param other:
         :return: Bool
         """
@@ -74,6 +103,13 @@ class Feuille(Arbre):
             return True
         else:
             return False
+
+    def __contains__(self, item):
+        return item == self
+
+    def table_de_codage(self, code=''):
+        self.dic[self.symbole] = code
+
 
 #Huffman
 
@@ -122,6 +158,22 @@ class Huffman:
         """
         self.arbre().affiche()
 
+    def compresse(self, texte) -> str:
+        """
+        code un texte avec le dictionnaire precedement genere
+        
+        :param texte: texte a coder
+        :return: str
+        """
+        dico = self.arbre().table_de_codage()
+        code = ''
+        for car in texte:
+            if car not in dico:
+                raise "{} not in {}".format(car, dico)
+            else:
+                code += dico[car]
+        return code
+    
     def __init__(self, freq):
         """ Constructeur
 
@@ -232,11 +284,6 @@ def test_frequences():
 
 
 if __name__ == "__main__":
-    A = Arbre(18,
-              Arbre(8,
-                    Arbre(3,
-                          Feuille(1, 'd'),
-                          Feuille(2, 'c')),
-                    Feuille(5, 'b')),
-              Feuille(10, 'a'))
-    A.affiche()
+    txt = "ABRACADABRA"
+    H = Huffman(frequences(txt))
+    print(H.compresse(txt))
