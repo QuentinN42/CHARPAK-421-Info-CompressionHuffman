@@ -18,9 +18,31 @@ class Arbre:
         prefixes.append('    ')
         self.droit.affiche(prefixes)
         prefixes.pop()
-
+    
     def __add__(self, other):
         return Arbre(self.frequence + other.frequence, self, other)
+
+    def __eq__(self, other):
+        """
+        egal ou non ?
+
+        :param other:
+        :return: Bool
+        """
+        if type(other) != type(self):
+            return False
+        elif self.frequence == other.frequence and self.gauche == other.gauche and self.droit == other.droit:
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        """
+        pas egal ?
+        :param other:
+        :return:
+        """
+        return not self == other
 
 
 class Feuille(Arbre):
@@ -38,7 +60,20 @@ class Feuille(Arbre):
         print("".join(prefixes[:-1]) + '|___' +
               str(self.frequence) +
               '(' + self.symbole + ')')
-
+    
+    def __eq__(self, other):
+        """
+        egal ou non ?
+        
+        :param other:
+        :return: Bool
+        """
+        if type(other) != type(self):
+            return False
+        elif self.frequence == other.frequence and self.symbole == other.symbole:
+            return True
+        else:
+            return False
 
 #Huffman
 
@@ -61,11 +96,6 @@ class Huffman:
         fusionne si possible les deux plus petits arbres
         
         :return bool: fusion possible ?
-        
-        >>> Huffman({'a': 5}).fusion()
-        False
-        >>> Huffman({'a': 5, 'b': 5}).fusion()
-        True
         """
         if len(self.foret) > 1:
             e1 = self.pop_min()
