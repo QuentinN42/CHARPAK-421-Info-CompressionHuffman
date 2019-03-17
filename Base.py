@@ -192,7 +192,7 @@ class Huffman:
         :param texte: texte a coder
         :return: str
         """
-        dico = self.arbre().table_de_codage()
+        dico = self.arbre().table_de_codage(self.symboles)
         code = ''
         for car in texte:
             if car not in dico:
@@ -208,6 +208,7 @@ class Huffman:
         :param freq: dictionnaire des fréquences
         :param debug: debug mode
         """
+        self.symboles = freq.keys()
         self.foret = [Feuille(freq[symbole], symbole) for symbole in freq.keys()]
         if not debug:
             while self.fusion():
