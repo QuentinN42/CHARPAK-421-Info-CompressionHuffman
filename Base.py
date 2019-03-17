@@ -28,6 +28,11 @@ class Arbre:
         egal ou non ?
         :param other:
         :return: Bool
+        
+        >>> Arbre(1, Feuille(0), Feuille(1)) == Arbre(1, Feuille(0), Feuille(1))
+        True
+        >>> Arbre(1, Feuille(0), Feuille(1)) == Arbre(1, Feuille(1), Feuille(0))
+        False
         """
         if type(other) != type(self):
             return False
@@ -41,29 +46,40 @@ class Arbre:
         pas egal ?
         :param other:
         :return:
+        
+        >>> Arbre(1, Feuille(0), Feuille(1)) != Arbre(1, Feuille(0), Feuille(1))
+        False
+        >>> Arbre(1, Feuille(0), Feuille(1)) != Arbre(1, Feuille(1), Feuille(0))
+        True
         """
         return not self == other
 
     def __contains__(self, item):
         """
-        pour le if a in Arbre:
+        pour le if item in Arbre:
         :param item: quelque chose
         :return: bool
+        
+        >>> Arbre(1, Feuille(0), Feuille(1)) in Arbre(1, Feuille(0), Feuille(1))
+        False
+        >>> Feuille(0) in Arbre(1, Feuille(0), Feuille(1))
+        True
         """
-        return item == self or item in self.droit or item in self.gauche
+        return item == self.droit or item == self.gauche or item in self.droit or item in self.gauche
     
-    def code(self, feuille) -> str:
+    def code(self, symb) -> str:
         """
         descend l'arbre pour trouver le code d'une feuille
         :param feuille: Feuille
         :return code: str
         """
-        if feuille not in self:
-            raise "feuille {} not in {}".format(feuille, self)
+        f_type = type(Feuille(0))
+        if symb not in self:
+            raise "symbole {} n'est pas dans l'arbre {}".format(symb, self)
         code = ""
         selected = self
-        while selected != feuille:
-            if feuille in selected.gauche:
+        while type(selected) != f_type:
+            if symb in selected.gauche:
                 selected = selected.gauche
             else:
                 selected = selected.droit
@@ -75,7 +91,7 @@ class Arbre:
         return self.dic
 
 class Feuille(Arbre):
-    def __init__(self, frequence, symbole):
+    def __init__(self, frequence, symbole = ''):
         """
         Construit une feuille
 
@@ -105,7 +121,7 @@ class Feuille(Arbre):
             return False
 
     def __contains__(self, item):
-        return item == self
+        return item == self.symbole
 
     def table_de_codage(self, code=''):
         self.dic[self.symbole] = code
@@ -123,6 +139,9 @@ class Huffman:
         pop le premier element
         
         :return Feuille: la moins frequente des feuilles
+        
+        >>> Huffman(frequences('a'*5+'b'*2), debug = True).pop_min() == Feuille(2,'b')
+        True
         """
         self.foret.sort(key = lambda x: x.frequence)
         return self.foret.pop(0)
@@ -174,14 +193,17 @@ class Huffman:
                 code += dico[car]
         return code
     
-    def __init__(self, freq):
-        """ Constructeur
+    def __init__(self, freq, debug = False):
+        """
+        Constructeur
 
-            freq: dictionnaire des fréquences
+        :param freq: dictionnaire des fréquences
+        :param debug: debug mode
         """
         self.foret = [Feuille(freq[symbole], symbole) for symbole in freq.keys()]
-        while self.fusion():
-            pass
+        if not debug:
+            while self.fusion():
+                pass
 
 
 #Fonctions
@@ -285,5 +307,7 @@ def test_frequences():
 
 if __name__ == "__main__":
     txt = "ABRACADABRA"
-    H = Huffman(frequences(txt))
-    print(H.compresse(txt))
+    H = Huffman(frequences(txt), debug = True)
+    #print(H.compresse(txt))
+    while H.fusion():
+        print(H.foret)
