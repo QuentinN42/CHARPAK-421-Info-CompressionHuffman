@@ -1,5 +1,5 @@
 class Arbre:
-    def __init__(self, frequence, gauche, droit, dic ={}):
+    def __init__(self, frequence, gauche, droit):
         """ Construit un Arbre
 
             frequence: int
@@ -8,7 +8,6 @@ class Arbre:
         self.frequence = frequence
         self.gauche = gauche
         self.droit = droit
-        self.dic = dic
 
     def affiche(self, prefixes=['    ']):
         """ Affiche l'arbre """
@@ -70,8 +69,11 @@ class Arbre:
     def code(self, symb) -> str:
         """
         descend l'arbre pour trouver le code d'une feuille
-        :param feuille: Feuille
+        :param symb: symbole d'une Feuille
         :return code: str
+        
+        >>> Arbre(1, Arbre(1, Feuille(0,'A'), Feuille(1,'B')), Arbre(1, Feuille(0,'C'), Feuille(1,'D'))).code('C')
+        '10'
         """
         f_type = type(Feuille(0))
         if symb not in self:
@@ -81,14 +83,23 @@ class Arbre:
         while type(selected) != f_type:
             if symb in selected.gauche:
                 selected = selected.gauche
+                code += "0"
             else:
                 selected = selected.droit
+                code += "1"
         return code
     
-    def table_de_codage(self, code=''):
-        self.gauche.table_de_codage(code + '0')
-        self.droit.table_de_codage(code + '1')
-        return self.dic
+    def table_de_codage(self, symboles) -> dict:
+        """
+        associe a chaque symbole son code
+        :param symboles: liste des symboles
+        :return d: dictionnaire des codage
+        """
+        d = {}
+        for s in symboles:
+            d[s] = self.code(s)
+        return d
+
 
 class Feuille(Arbre):
     def __init__(self, frequence, symbole = ''):
@@ -101,7 +112,7 @@ class Feuille(Arbre):
         Arbre.__init__(self, frequence, None, None)
         self.symbole = symbole
 
-    def affiche(self, prefixes=['    ']):
+    def affiche(self, prefixes=[' '*4]):
         """ Affiche la feuille """
         print("".join(prefixes[:-1]) + '|___' +
               str(self.frequence) +
@@ -122,9 +133,6 @@ class Feuille(Arbre):
 
     def __contains__(self, item):
         return item == self.symbole
-
-    def table_de_codage(self, code=''):
-        self.dic[self.symbole] = code
 
 
 #Huffman
@@ -222,7 +230,7 @@ def encode(c: str) -> str:
     return "{:08b}".format(ord(c))
 
 
-def encode_ascii(txt):
+def encode_ascii(txt: str) -> str:
     """
     permet d'encoder en ascii
 
