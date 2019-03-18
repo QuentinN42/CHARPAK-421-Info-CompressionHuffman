@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+UE Radiofrequence :
+DM Huffman
+Compression et decompression via l'arbre de huffman.
+"""
+
+
 class Arbre:
     def __init__(self, frequence, gauche, droit):
         """ Construit un Arbre
