@@ -5,6 +5,9 @@
 UE Radiofrequence :
 DM Huffman
 Compression et decompression via l'arbre de huffman.
+
+@author : Quentin Lieumont
+@date : Mar 2019
 """
 
 
