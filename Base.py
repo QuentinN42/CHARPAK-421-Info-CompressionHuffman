@@ -195,7 +195,7 @@ class Huffman:
         """
         self.arbre().affiche()
 
-    def compresse(self, texte) -> str:
+    def compresse(self, texte: str) -> str:
         """
         code un texte avec le dictionnaire precedement genere
         
@@ -210,6 +210,30 @@ class Huffman:
             else:
                 code += dico[car]
         return code
+    
+    def decompresse(self, code: str) -> str:
+        """
+        decode le code en descendat l'arbre
+        thx to SilentGhost pour le dico inverse :
+        https://stackoverflow.com/questions/483666/python-reverse-invert-a-mapping
+        
+        :param code: str
+        :return texte: str
+        >>> H = Huffman(frequences("ABRACADABRA"))
+        >>> H.decompresse("01101110100010101101110")
+        'ABRACADABRA'
+        """
+        dico = self.arbre().table_de_codage(self.symboles)
+        inv_dico = {v: k for k, v in dico.items()}
+        texte = ""
+        
+        while code is not "":
+            nb = 1
+            while code[0:nb] not in inv_dico.keys():
+                nb += 1
+            texte += inv_dico[code[0:nb]]
+            code = code[nb:]
+        return texte
     
     def __init__(self, freq, debug = False):
         """
@@ -325,8 +349,6 @@ def test_frequences():
 
 
 if __name__ == "__main__":
-    txt = "ABRACADABRA"
-    H = Huffman(frequences(txt), debug = True)
-    #print(H.compresse(txt))
-    while H.fusion():
-        print(H.foret)
+    H = Huffman(frequences("ABRACADABRA"))
+    print(H.compresse("ABRACADABRA"))
+    print(H.decompresse("01101110100010101101110"))
