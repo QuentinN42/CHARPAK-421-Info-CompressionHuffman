@@ -1,3 +1,8 @@
+
+cmode = ["c", "code"]
+dmode = ["d", "decode"]
+
+
 alphabet = {
     'a': '01100001',
     'b': '01100010',
