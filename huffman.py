@@ -300,58 +300,6 @@ def frequences(txt: str) -> dict:
     return d
 
 
-#Tests pytest
-
-
-def decorated_test(func):
-    def inner(*args, **kwargs):
-        before = "\n"*3+"="*10
-        print(before, func.__name__, before[::-1])
-        res = func(*args, **kwargs)
-        return res
-    return inner
-
-
-def _test_dict(dico, func, p) -> list:
-    """
-    test une fonction pour chaque element d'un dictionnaire
-    
-    :param dico: dictionnaire input, expected output
-    :param func: fonction a tester
-    :return: tableau des resultats des tests
-    """
-    tab = []
-    for key in dico.keys():
-        expected = dico[key]
-        result = func(key)
-        if p:
-            print('Input :', key)
-            print('Expected output :', expected)
-            print('Returned output :', result)
-        tab.append(expected == result)
-    return tab
-
-
-@decorated_test
-def test_encode(p = False):
-    """
-    test toutes les lettres de l'alphabet contenues dans le fichier usefull.py
-    """
-    from usefull import alphabet
-    for test in _test_dict(alphabet, encode, p):
-        assert test
-
-
-@decorated_test
-def test_frequences(p = True):
-    """
-    test les combinaisons de str/frequences presentes dans usefull.py
-    """
-    from usefull import freqTest
-    for test in _test_dict(freqTest, frequences, p):
-        assert test
-
-
 if __name__ == "__main__":
     from test_parsearg import parse_arguments
     from usefull import cmode, dmode
@@ -390,7 +338,7 @@ if __name__ == "__main__":
         print("Le texte a ete decompresse avec succes. Il fait {} caracteres :\n\n".format(len(txt)))
         
     else:
-        raise KeyError("Mode must be in {} or in {}".format(cmode, dmode))
+        raise KeyError("Mode doit etre dans {} ou dans {}".format(cmode, dmode))
 
     if output_a is not None:
         with open(output_a, 'a') as f:
