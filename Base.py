@@ -371,11 +371,9 @@ if __name__ == "__main__":
         
         with open(config, 'r') as f:
             h = Huffman(frequences(f.read()))
-            f.close()
         with open(InputFile, 'r') as f:
             raw_txt = f.read()
             txt = h.compresse(raw_txt)
-            f.close()
         
         print("Le texte a ete compresse avec le facteur suivant : {}\n\n".format(100*len(txt)/(8*len(raw_txt))))
         
@@ -385,10 +383,8 @@ if __name__ == "__main__":
         
         with open(config, 'r') as f:
             h = Huffman(frequences(f.read()))
-            f.close()
         with open(InputFile, 'r') as f:
             txt = h.decompresse(f.read())
-            f.close()
 
         print("Le texte a ete decompresse avec succes. Il fait {} caracteres :\n\n".format(len(txt)))
         
@@ -398,12 +394,10 @@ if __name__ == "__main__":
     if output_a is not None:
         with open(output_a, 'a') as f:
             f.write(txt)
-            f.close()
         print("Ecriture a la suite reussie")
     elif output_w is not None:
         with open(output_w, 'w') as f:
             f.write(txt)
-            f.close()
         print("Ecrasement effectué")
     else:
         print(txt)

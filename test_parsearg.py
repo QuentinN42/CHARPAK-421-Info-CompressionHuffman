@@ -5,9 +5,13 @@
 Test du parseur d'arguments
 """
 
-__version__ = '1.2'
-
 import argparse
+import os
+
+os.system('git rev-list --count HEAD > version')
+with open('version', 'r') as f:
+    __version__ = '1.' + f.read()
+
 
 
 def parse_arguments():
@@ -24,7 +28,7 @@ def parse_arguments():
     parser.add_argument("-ao", "--AppendOutput", help="Fichier de sortie (ecrit a la suite)", type=str)
 
     # Print version
-    parser.add_argument("--version", action="version", version=__file__ + ' - Version ' + __version__)
+    parser.add_argument("--version", action="version", version='Huffman - Version ' + __version__)
 
     # Parse arguments
     args = parser.parse_args()

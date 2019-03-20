@@ -5,10 +5,10 @@ Institut Villebon Georges Charpak
 
 #### Utitlisation du programe
 Le programme s'execute de la maniere suivante : `python Base.py ARGS args_optionnels`
-* Arguments
+* Arguments :
     * Mode : `C` pour coder un texte et `D` pour le décoder.
     * Input : Le fichier à coder/décoder.
-* Arguments optionnels
+* Arguments optionnels :
     * Help `--help` : Affiche l'aide.
     * Version `--version` Affiche la version du programme.
     * Configuration `--config` : Fichier de configuration des frequences.\
