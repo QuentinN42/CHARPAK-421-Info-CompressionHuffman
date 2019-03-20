@@ -5,7 +5,7 @@
 Test du parseur d'arguments
 """
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 import argparse
 
