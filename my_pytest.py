@@ -1,6 +1,14 @@
-from huffman import encode, frequences
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-#Tests pytest
+"""
+Test de huffman.py
+
+@author : Quentin Lieumont
+@date : Mar 2019
+"""
+
+from huffman import encode, frequences
 
 
 def decorated_test(func):
