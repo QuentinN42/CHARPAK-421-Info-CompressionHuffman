@@ -312,7 +312,7 @@ def decorated_test(func):
     return inner
 
 
-def _test_dict(dico, func) -> list:
+def _test_dict(dico, func, p) -> list:
     """
     test une fonction pour chaque element d'un dictionnaire
     
@@ -322,32 +322,33 @@ def _test_dict(dico, func) -> list:
     """
     tab = []
     for key in dico.keys():
-        print('Input :', key)
         expected = dico[key]
         result = func(key)
-        print('Expected output :', expected)
-        print('Returned output :', result)
+        if p:
+            print('Input :', key)
+            print('Expected output :', expected)
+            print('Returned output :', result)
         tab.append(expected == result)
     return tab
 
 
 @decorated_test
-def test_encode():
+def test_encode(p = False):
     """
     test toutes les lettres de l'alphabet contenues dans le fichier usefull.py
     """
     from usefull import alphabet
-    for test in _test_dict(alphabet, encode):
+    for test in _test_dict(alphabet, encode, p):
         assert test
 
 
 @decorated_test
-def test_frequences():
+def test_frequences(p = True):
     """
     test les combinaisons de str/frequences presentes dans usefull.py
     """
     from usefull import freqTest
-    for test in _test_dict(freqTest, frequences):
+    for test in _test_dict(freqTest, frequences, p):
         assert test
 
 

@@ -13,7 +13,6 @@ with open('version', 'r') as f:
     __version__ = '1.' + f.read()
 
 
-
 def parse_arguments():
     # Create argument parser
     parser = argparse.ArgumentParser()
@@ -37,4 +36,4 @@ def parse_arguments():
 
 
 if __name__ == "__main__":
-    print(parse_arguments().InputFile)
+    print(parse_arguments())
