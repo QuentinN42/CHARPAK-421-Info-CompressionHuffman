@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 """
 UE Radiofrequence :
 DM Huffman
@@ -9,6 +8,7 @@ Compression et decompression via l'arbre de huffman.
 @author : Quentin Lieumont
 @date : Mar 2019
 """
+
 
 
 class Arbre:
@@ -31,7 +31,7 @@ class Arbre:
         prefixes.append('    ')
         self.droit.affiche(prefixes)
         prefixes.pop()
-    
+
     def __add__(self, other):
         return Arbre(self.frequence + other.frequence, self, other)
 
@@ -40,7 +40,7 @@ class Arbre:
         egal ou non ?
         :param other:
         :return: Bool
-        
+
         >>> Arbre(1, Feuille(0), Feuille(1)) == Arbre(1, Feuille(0), Feuille(1))
         True
         >>> Arbre(1, Feuille(0), Feuille(1)) == Arbre(1, Feuille(1), Feuille(0))
@@ -58,7 +58,7 @@ class Arbre:
         pas egal ?
         :param other:
         :return:
-        
+
         >>> Arbre(1, Feuille(0), Feuille(1)) != Arbre(1, Feuille(0), Feuille(1))
         False
         >>> Arbre(1, Feuille(0), Feuille(1)) != Arbre(1, Feuille(1), Feuille(0))
@@ -71,20 +71,20 @@ class Arbre:
         pour le if item in Arbre:
         :param item: quelque chose
         :return: bool
-        
+
         >>> Arbre(1, Feuille(0), Feuille(1)) in Arbre(1, Feuille(0), Feuille(1))
         False
         >>> Feuille(0) in Arbre(1, Feuille(0), Feuille(1))
         True
         """
         return item == self.droit or item == self.gauche or item in self.droit or item in self.gauche
-    
+
     def code(self, symb) -> str:
         """
         descend l'arbre pour trouver le code d'une feuille
         :param symb: symbole d'une Feuille
         :return code: str
-        
+
         >>> Arbre(1, Arbre(1, Feuille(0,'A'), Feuille(1,'B')), Arbre(1, Feuille(0,'C'), Feuille(1,'D'))).code('C')
         '10'
         """
@@ -101,7 +101,7 @@ class Arbre:
                 selected = selected.droit
                 code += "1"
         return code
-    
+
     def table_de_codage(self, symboles) -> dict:
         """
         associe a chaque symbole son code
@@ -130,7 +130,7 @@ class Feuille(Arbre):
         print("".join(prefixes[:-1]) + '|___' +
               str(self.frequence) +
               '(' + self.symbole + ')')
-    
+
     def __eq__(self, other):
         """
         egal ou non ?
@@ -153,14 +153,14 @@ class Feuille(Arbre):
 
 class Huffman:
     """ Algorithme de construction de l'arbre de Huffman """
-    
+
     def pop_min(self) -> Feuille:
         """
         trie le tableau
         pop le premier element
-        
+
         :return Feuille: la moins frequente des feuilles
-        
+
         >>> Huffman(frequences('a'*5+'b'*2), debug = True).pop_min() == Feuille(2,'b')
         True
         """
@@ -170,7 +170,7 @@ class Huffman:
     def fusion(self) -> bool:
         """
         fusionne si possible les deux plus petits arbres
-        
+
         :return bool: fusion possible ?
         """
         if len(self.foret) > 1:
@@ -185,7 +185,7 @@ class Huffman:
         """
         Cree un arbre de huffman
         tourne tant que fusion est vrai
-        
+
         :return Arbre: L'arbre cree
         """
         return self.foret[0]
@@ -193,7 +193,7 @@ class Huffman:
     def affiche(self) -> None:
         """
         affiche l'arbre de huffman
-        
+
         :return None:
         """
         self.arbre().affiche()
@@ -201,7 +201,7 @@ class Huffman:
     def compresse(self, texte: str) -> str:
         """
         code un texte avec le dictionnaire precedement genere
-        
+
         :param texte: texte a coder
         :return: str
         """
@@ -213,13 +213,13 @@ class Huffman:
             else:
                 code += dico[car]
         return code
-    
+
     def decompresse(self, code: str) -> str:
         """
         decode le code en descendat l'arbre
         thx to SilentGhost pour le dico inverse :
         https://stackoverflow.com/questions/483666/python-reverse-invert-a-mapping
-        
+
         :param code: str
         :return texte: str
         >>> H = Huffman(frequences("ABRACADABRA"))
@@ -229,7 +229,7 @@ class Huffman:
         dico = self.arbre().table_de_codage(self.symboles)
         inv_dico = {v: k for k, v in dico.items()}
         texte = ""
-        
+
         while code is not "":
             nb = 1
             while code[0:nb] not in inv_dico.keys():
@@ -237,7 +237,7 @@ class Huffman:
             texte += inv_dico[code[0:nb]]
             code = code[nb:]
         return texte
-    
+
     def __init__(self, freq, debug = False):
         """
         Constructeur
@@ -253,8 +253,6 @@ class Huffman:
 
 
 #Fonctions
-
-
 def encode(c: str) -> str:
     """
     code un caractere en ascii 8 bit
@@ -268,6 +266,8 @@ def encode(c: str) -> str:
     return "{:08b}".format(ord(c))
 
 
+
+
 def encode_ascii(txt: str) -> str:
     """
     permet d'encoder en ascii
@@ -279,6 +279,58 @@ def encode_ascii(txt: str) -> str:
     '01100010011011110110111001101010011011110111010101110010'
     """
     return ''.join([encode(c) for c in txt])
+
+
+if __name__ == "__main__":
+    from test_parsearg import parse_arguments
+    from usefull import cmode, dmode
+
+    args = parse_arguments()
+
+    Mode = args.Mode
+    InputFile = args.InputFile
+
+    config = args.config
+
+    output_a = args.AppendOutput
+    output_w = args.Output
+
+    if Mode.lower() in cmode:
+        if config is None:
+            config = InputFile
+
+        with open(config, 'r') as f:
+            h = Huffman(frequences(f.read()))
+        with open(InputFile, 'r') as f:
+            raw_txt = f.read()
+            txt = h.compresse(raw_txt)
+
+        print("Le texte a ete compresse avec le facteur suivant : {}\n\n".format(100*len(txt)/(8*len(raw_txt))))
+
+    elif Mode.lower() in dmode:
+        if config is None:
+            raise FileNotFoundError("Comment decoder ce message ?\nUtiliser -c CONFIG\n --help pour plus d'info")
+
+        with open(config, 'r') as f:
+            h = Huffman(frequences(f.read()))
+        with open(InputFile, 'r') as f:
+            txt = h.decompresse(f.read())
+
+        print("Le texte a ete decompresse avec succes. Il fait {} caracteres :\n\n".format(len(txt)))
+
+    else:
+        raise KeyError("Mode doit etre dans {} ou dans {}".format(cmode, dmode))
+
+    if output_a is not None:
+        with open(output_a, 'a') as f:
+            f.write(txt)
+        print("Ecriture a la suite reussie")
+    elif output_w is not None:
+        with open(output_w, 'w') as f:
+            f.write(txt)
+        print("Ecrasement effectué")
+    else:
+        print(txt)
 
 
 def frequences(txt: str) -> dict:
@@ -298,55 +350,3 @@ def frequences(txt: str) -> dict:
         else:
             d[c] = 1
     return d
-
-
-if __name__ == "__main__":
-    from test_parsearg import parse_arguments
-    from usefull import cmode, dmode
-    
-    args = parse_arguments()
-
-    Mode = args.Mode
-    InputFile = args.InputFile
-
-    config = args.config
-    
-    output_a = args.AppendOutput
-    output_w = args.Output
-    
-    if Mode.lower() in cmode:
-        if config is None:
-            config = InputFile
-        
-        with open(config, 'r') as f:
-            h = Huffman(frequences(f.read()))
-        with open(InputFile, 'r') as f:
-            raw_txt = f.read()
-            txt = h.compresse(raw_txt)
-        
-        print("Le texte a ete compresse avec le facteur suivant : {}\n\n".format(100*len(txt)/(8*len(raw_txt))))
-        
-    elif Mode.lower() in dmode:
-        if config is None:
-            raise FileNotFoundError("Comment decoder ce message ?\nUtiliser -c CONFIG\n --help pour plus d'info")
-        
-        with open(config, 'r') as f:
-            h = Huffman(frequences(f.read()))
-        with open(InputFile, 'r') as f:
-            txt = h.decompresse(f.read())
-
-        print("Le texte a ete decompresse avec succes. Il fait {} caracteres :\n\n".format(len(txt)))
-        
-    else:
-        raise KeyError("Mode doit etre dans {} ou dans {}".format(cmode, dmode))
-
-    if output_a is not None:
-        with open(output_a, 'a') as f:
-            f.write(txt)
-        print("Ecriture a la suite reussie")
-    elif output_w is not None:
-        with open(output_w, 'w') as f:
-            f.write(txt)
-        print("Ecrasement effectué")
-    else:
-        print(txt)
